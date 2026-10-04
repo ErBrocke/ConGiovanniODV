@@ -1,0 +1,188 @@
+---
+import '@fontsource-variable/bricolage-grotesque';
+import '@fontsource-variable/newsreader';
+import { getCollection } from 'astro:content';
+
+const items = (await getCollection('programma')).sort(
+  (a, b) => a.data.date.valueOf() - b.data.date.valueOf()
+);
+const fmt = new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Con Giovanni ODV. Musica e teatro in ricordo di Giovanni Capanna</title>
+    <meta name="description" content="Con Giovanni è un'associazione di volontariato che sostiene iniziative di musica e teatro in ricordo di Giovanni Capanna." />
+    <link rel="icon" href="/logo-con-giovanni.png" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Vai al contenuto</a>
+
+    <div class="blu">
+      <header class="wrap top">
+        <a class="brand" href="/">Con Giovanni</a>
+        <nav aria-label="Principale">
+          <a href="#chi">Chi era Giovanni</a>
+          <a href="#programma">Il programma</a>
+          <a href="#sostieni">Sostienici</a>
+        </nav>
+      </header>
+
+      <div class="wrap hero">
+        <div>
+          <h1>Musica e teatro, come piaceva a lui.</h1>
+          <p>Con Giovanni è l'associazione di volontariato che sostiene iniziative di musica e teatro in ricordo di Giovanni Capanna.</p>
+          <a class="btn" href="#sostieni">Fai una donazione</a>
+        </div>
+        <img
+          src="/logo-con-giovanni.png"
+          width="500" height="500"
+          alt="Logo di Con Giovanni ODV: ritratto di Giovanni Capanna con occhiali da sole, dentro un cerchio blu"
+        />
+      </div>
+    </div>
+
+    <main id="main">
+      <section class="band wrap chi" id="chi" aria-labelledby="chi-t">
+        <h2 id="chi-t">Chi era Giovanni</h2>
+        <div>
+          <p>Giovanni Capanna era amministratore delegato di Capanna People. Chi lo conosceva ricorda soprattutto che faceva ridere, e che sapeva farlo anche di sé stesso.</p>
+          <p>Amava Livorno e la sua famiglia, l'Inter, lo sci, la musica e il teatro. Con Giovanni nasce per tenere insieme le cose che amava, aiutando chi oggi fa musica e teatro.</p>
+        </div>
+      </section>
+
+      <section class="band nero prog" id="programma" aria-labelledby="prog-t">
+        <div class="wrap">
+          <h2 id="prog-t">Il programma</h2>
+          {items.length === 0 ? (
+            <p class="vuoto">Le prossime iniziative sono in preparazione. Scrivici se vuoi proporne una.</p>
+          ) : (
+            <ul>
+              {items.map((i) => (
+                <li>
+                  <time datetime={i.data.date.toISOString().slice(0, 10)}>{fmt.format(i.data.date)}</time>
+                  <div>
+                    <h3>{i.data.title}</h3>
+                    <p>{i.data.summary}</p>
+                  </div>
+                  <span class="place">{i.data.place}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </section>
+
+      <section class="band wrap sost" id="sostieni" aria-labelledby="sost-t">
+        <h2 id="sost-t">Come sostenerci</h2>
+        <dl>
+          <div class="row">
+            <dt>Bonifico</dt>
+            <dd>
+              <p>Intestato a Con Giovanni ODV.</p>
+              <p class="dato">IBAN da inserire</p>
+            </dd>
+          </div>
+          <div class="row">
+            <dt>5 per mille</dt>
+            <dd>
+              <p>Nella dichiarazione dei redditi, firma il riquadro del volontariato e scrivi il codice fiscale.</p>
+              <p class="dato">Codice fiscale da inserire</p>
+            </dd>
+          </div>
+          <div class="row">
+            <dt>Dai una mano</dt>
+            <dd>
+              <p>Se vuoi aiutare a organizzare le iniziative, scrivici.</p>
+              <p class="dato">Email da inserire</p>
+            </dd>
+          </div>
+        </dl>
+      </section>
+    </main>
+
+    <footer class="nero foot">
+      <div class="wrap">
+        <p>Con Giovanni ODV</p>
+        <p>Organizzazione di volontariato in ricordo di Giovanni Capanna.</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --blu: #0a0a8c;
+    --nero: #07070f;
+    --carta: #f0f1f8;
+    --soft: #4b5185;
+    --chiaro: #c5c8ee;
+    --display: 'Bricolage Grotesque Variable', 'Arial Narrow', sans-serif;
+    --text: 'Newsreader Variable', Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--carta); color: var(--nero); font: 1.2rem/1.65 var(--text); }
+  h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.02; letter-spacing: -0.02em; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+
+  .skip { position: absolute; left: -999px; }
+  .skip:focus { left: 1rem; top: 1rem; z-index: 9; padding: 0.6rem 1rem; background: #fff; color: var(--nero); }
+
+  .wrap { max-width: 72rem; margin: 0 auto; padding-left: 1.25rem; padding-right: 1.25rem; }
+  .band { padding-top: 4rem; padding-bottom: 4rem; }
+  .blu { background: var(--blu); color: #fff; }
+  .nero { background: var(--nero); color: #fff; }
+
+  .top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.25rem 1.5rem; padding-top: 1rem; padding-bottom: 1rem; }
+  .brand { font: 800 1.25rem var(--display); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+  .top nav { display: flex; flex-wrap: wrap; gap: 0 1.5rem; }
+  .top nav a { min-height: 44px; display: inline-flex; align-items: center; font: 500 1rem var(--display); }
+
+  .hero { display: grid; gap: 2rem; align-items: center; padding-top: 2rem; padding-bottom: 4rem; }
+  .hero h1 { font-size: clamp(2.8rem, 9vw, 6rem); font-weight: 800; }
+  .hero p { max-width: 34ch; margin: 1.5rem 0 2rem; font-size: 1.35rem; }
+  .hero img { width: min(100%, 34rem); height: auto; justify-self: center; }
+  .btn { display: inline-flex; align-items: center; min-height: 3.25rem; padding: 0 1.75rem; background: #fff; color: var(--blu); font: 700 1.1rem var(--display); text-decoration: none; border-radius: 0.25rem; transition: background 0.2s, color 0.2s; }
+  .btn:hover { background: var(--nero); color: #fff; }
+
+  .chi, .sost { display: grid; gap: 1.5rem; }
+  .chi h2, .prog h2, .sost h2 { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 800; }
+  .chi p { max-width: 60ch; margin: 0 0 1.2rem; }
+
+  .prog ul { list-style: none; margin: 2rem 0 0; padding: 0; }
+  .prog li { display: grid; gap: 0.25rem 2rem; padding: 1.5rem 0; border-top: 1px solid #4a4d8f; }
+  .prog li:last-child { border-bottom: 1px solid #4a4d8f; }
+  .prog time { font: 600 1.1rem var(--display); }
+  .prog h3 { font-size: 1.6rem; }
+  .prog li p { margin: 0.4rem 0 0; max-width: 55ch; color: var(--chiaro); }
+  .place { font-family: var(--display); color: var(--chiaro); }
+  .vuoto { margin: 2rem 0 0; max-width: 45ch; }
+
+  .sost dl { margin: 0; }
+  .sost .row { display: grid; gap: 0.25rem 2rem; padding: 1.5rem 0; border-top: 1px solid var(--soft); }
+  .sost dt { font: 700 1.4rem var(--display); }
+  .sost dd { margin: 0; }
+  .sost dd p { margin: 0 0 0.4rem; max-width: 55ch; }
+  .dato { font: 600 1.2rem var(--display); color: var(--blu); overflow-wrap: anywhere; }
+
+  .foot { padding-top: 2.5rem; padding-bottom: 2.5rem; font-size: 1rem; }
+  .foot p { margin: 0 0 0.25rem; color: var(--chiaro); }
+  .foot p:first-child { font: 700 1.2rem var(--display); color: #fff; }
+
+  @media (min-width: 56rem) {
+    .hero { grid-template-columns: 1.15fr 0.85fr; }
+    .hero img { justify-self: end; }
+    .chi { grid-template-columns: 1fr 2fr; gap: 3rem; }
+    .prog li { grid-template-columns: 12rem 1fr 10rem; }
+    .sost { grid-template-columns: 1fr 2fr; gap: 3rem; }
+    .sost .row { grid-template-columns: 1fr 2fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+</style>
