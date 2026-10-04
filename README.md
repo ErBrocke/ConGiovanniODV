@@ -6,5 +6,5 @@ Astro static site. Deploy on Cloudflare Pages:
 
 Local: `npm install && npm run dev`
 
-Add an initiative: create a `.md` file in `src/content/programma/` (title, date, place, summary).
+Add an edition: create a `.md` file in `src/content/programma/` (title, date, place, summary). Newest shows first.
 Fill in the three "da inserire" items in `src/pages/index.astro` (IBAN, codice fiscale, email).
