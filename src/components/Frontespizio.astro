@@ -1,0 +1,42 @@
+---
+// Cover of an interior page: an ink band with the masthead, the page title
+// and one line saying what the page is. The home and edition pages have their own covers.
+import Testata from './Testata.astro';
+interface Props {
+  titolo: string;
+  lead?: string;
+}
+const { titolo, lead } = Astro.props;
+---
+<div class="ink copertina">
+  <div class="wrap">
+    <Testata />
+    <div class="frontespizio">
+      <h1>{titolo}</h1>
+      {lead && <p class="lead">{lead}</p>}
+    </div>
+  </div>
+</div>
+
+<style>
+  .copertina { padding-bottom: var(--space-4); }
+  .frontespizio {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: end;
+    gap: var(--space-3) clamp(2rem, 6vw, 6rem);
+    padding-top: var(--space-5);
+  }
+  h1 {
+    font-size: clamp(3.25rem, 2rem + 5vw, 6rem);
+    font-stretch: 62%;
+    font-weight: 850;
+    line-height: 0.84;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+  }
+  .lead { max-width: var(--measure); color: var(--paper-2); padding-bottom: 0.3rem; }
+  @media (max-width: 60rem) {
+    .frontespizio { grid-template-columns: 1fr; }
+  }
+</style>

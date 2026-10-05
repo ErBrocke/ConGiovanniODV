@@ -1,0 +1,105 @@
+---
+import Base from '../../layouts/Base.astro';
+import Frontespizio from '../../components/Frontespizio.astro';
+import Testatina from '../../components/Testatina.astro';
+import Folio from '../../components/Folio.astro';
+import { tutteLeEdizioni, inCopertina, romano, dataBreve, ora, anno, isoGiorno, EMAIL } from '../../lib/edizioni';
+
+const edizioni = await tutteLeEdizioni();
+const { edizione: cop } = inCopertina(edizioni);
+const segnala = `mailto:${EMAIL}?subject=${encodeURIComponent('Segnalazione per il Premio Giovanni Capanna')}`;
+---
+<Base
+  title="Il Premio Giovanni Capanna · Con Giovanni ODV, Livorno"
+  description="Dal 2023, ogni anno, un premio in denaro a giovani artisti livornesi di musica e teatro. Tutte le edizioni, i premiati e le serate all’Auditorium del Conservatorio Mascagni."
+>
+  <Frontespizio titolo="Il Premio" lead="Dal 2023, ogni anno, un premio in denaro a giovani artisti livornesi di musica e teatro." />
+
+  <main id="contenuto">
+    <section class="pagina" aria-label="Che cos’è il Premio">
+      <div class="wrap"><Testatina numero={cop.data.numero} /></div>
+      <div class="wrap due">
+        <div class="intro">
+          <h2 class="display">Una serata per i giovani</h2>
+        </div>
+        <div class="testo">
+          <p>La prima edizione si è tenuta il 3 dicembre 2023, a due anni dalla scomparsa di Giovanni. Da allora la serata torna ogni autunno all’Auditorium del Conservatorio Mascagni, con ingresso libero.</p>
+          <p>I premiati non ritirano soltanto il premio: suonano e recitano davanti a chiunque voglia esserci.</p>
+          <p>Nel 2025 il Premio è stato riconosciuto nell’ambito della Festa della Toscana, bando del Consiglio regionale della Toscana.</p>
+          <p>Conosci un giovane musicista o attore livornese che lo meriterebbe? <a href={segnala}>Scrivici</a>.</p>
+        </div>
+      </div>
+
+      <section class="wrap edizioni" aria-labelledby="edizioni-t">
+        <h2 id="edizioni-t" class="display">Le edizioni</h2>
+        <ol class="elenco">
+          {edizioni.map((e) => (
+            <li>
+              <a class="riga" href={`/premio/${anno(e)}/`}>
+                <span class="numero" aria-hidden="true">{romano(e.data.numero)}</span>
+                <span class="sr-only">{romano(e.data.numero)} edizione,</span>
+                <span class="data">
+                  <time datetime={isoGiorno(e.data.data)}>{dataBreve(e.data.data)}</time>
+                  <span class="typed">{e.data.ora ? ora(e) : 'orario da annunciare'}</span>
+                </span>
+                <span class="premiati">
+                  {e.data.premiati.length > 0
+                    ? e.data.premiati.map((p) => (
+                        <span class="premiato">
+                          {p.nome}
+                          <span class="typed">{p.disciplina}</span>
+                        </span>
+                      ))
+                    : <span class="premiato vuoto">Premiati da annunciare</span>}
+                </span>
+                <span class="vai" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
+      <div class="wrap"><Folio n={5} /></div>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .testo { display: grid; gap: 1.1rem; max-width: var(--measure); }
+  .edizioni { margin-top: var(--space-6); }
+
+  .elenco { margin: var(--space-4) 0 0; padding: 0; list-style: none; border-top: 1.5px solid var(--ink); }
+  .elenco li { border-bottom: 1px solid var(--rule); }
+  .riga {
+    display: grid;
+    grid-template-columns: 9rem 11rem minmax(0, 1fr) 2.5rem;
+    align-items: center;
+    gap: 0.5rem clamp(1rem, 3vw, 2.5rem);
+    padding-block: 1.25rem;
+    text-decoration: none;
+    transition: background-color 0.25s var(--ease-out);
+  }
+  .numero {
+    font-weight: 850;
+    font-stretch: 62%;
+    font-size: clamp(3rem, 2rem + 3vw, 5rem);
+    line-height: 0.85;
+  }
+  .data { display: grid; font-weight: 650; font-stretch: 90%; }
+  .data .typed { font-weight: 400; color: var(--ink-2); font-size: 0.875rem; }
+  .premiati { display: flex; flex-wrap: wrap; gap: 0.35rem 1.75rem; }
+  .premiato { font-weight: 650; font-stretch: 92%; font-size: 1.125rem; line-height: 1.25; }
+  .premiato .typed { display: block; font-weight: 400; color: var(--ink-2); font-size: 0.875rem; }
+  .premiato.vuoto { font-weight: 400; color: var(--ink-2); }
+  .vai svg { width: 1.75rem; height: 1.75rem; transition: transform 0.35s var(--ease-out); }
+  .riga:hover { background: rgb(2 14 126 / 0.05); }
+  .riga:hover .vai svg { transform: translateX(0.35rem); }
+  .riga:focus-visible { outline-offset: -2px; }
+
+  @media (max-width: 60rem) {
+    .riga { grid-template-columns: 5.5rem minmax(0, 1fr) 2rem; }
+    .riga .premiati { grid-column: 2 / 3; }
+    .riga .vai { grid-row: 1 / span 2; grid-column: 3; }
+  }
+</style>

@@ -168,3 +168,29 @@ p { margin: 0; text-wrap: pretty; }
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---------- Printed pages, shared by every page of the site ---------- */
+.pagina { padding-block: var(--space-3); }
+.due {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: var(--space-4) clamp(2rem, 6vw, 6rem);
+  align-items: start;
+}
+.display {
+  font-size: clamp(2.75rem, 1.6rem + 4.6vw, 5.75rem);
+  font-stretch: 66%;
+  font-weight: 850;
+  line-height: 0.88;
+  text-transform: uppercase;
+}
+.lead {
+  font-size: clamp(1.25rem, 1.05rem + 0.6vw, 1.5rem);
+  line-height: 1.45;
+  font-stretch: 96%;
+}
+.intro { display: grid; gap: var(--space-3); max-width: var(--measure); }
+.intro .display { margin-bottom: var(--space-1); }
+@media (max-width: 60rem) {
+  .due { grid-template-columns: 1fr; }
+}

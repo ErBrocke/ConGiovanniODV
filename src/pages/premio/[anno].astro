@@ -129,7 +129,7 @@ const descrizione = e.data.premiati.length
           <span class="typed">edizione precedente</span>
         </a>
       ) : <span />}
-      <a class="tutte" href="/#edizioni">Tutte le edizioni</a>
+      <a class="tutte" href="/premio/">Tutte le edizioni</a>
       {successiva ? (
         <a class="succ" href={`/premio/${anno(successiva)}/`}>
           <span class="nr">{romano(successiva.data.numero)} · {anno(successiva)}</span>

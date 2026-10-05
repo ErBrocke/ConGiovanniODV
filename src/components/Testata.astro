@@ -4,17 +4,18 @@ interface Props {
 }
 const { presenta = false } = Astro.props;
 const voci = [
-  { href: '/#giovanni', label: 'Giovanni' },
-  { href: '/#premio', label: 'Il Premio' },
-  { href: '/#edizioni', label: 'Edizioni' },
-  { href: '/#sostieni', label: 'Sostieni' },
+  { href: '/giovanni/', label: 'Giovanni' },
+  { href: '/premio/', label: 'Il Premio' },
+  { href: '/sostieni/', label: 'Sostieni' },
 ];
+const percorso = Astro.url.pathname.replace(/\/?$/, '/');
+const corrente = (href: string) => percorso === href || (href === '/premio/' && percorso.startsWith('/premio/'));
 ---
 <header class="testata">
   <a class="marchio typed" href="/">Con Giovanni ODV{presenta && <span>&nbsp;presenta</span>}</a>
   <nav aria-label="Sezioni del sito">
     <ul>
-      {voci.map((v) => <li><a href={v.href}>{v.label}</a></li>)}
+      {voci.map((v) => <li><a href={v.href} aria-current={corrente(v.href) ? 'page' : undefined}>{v.label}</a></li>)}
     </ul>
   </nav>
 </header>
@@ -56,7 +57,7 @@ const voci = [
     background: linear-gradient(currentColor, currentColor) left calc(100% - 0.7rem) / 0 1.5px no-repeat;
     transition: background-size 0.3s var(--ease-out);
   }
-  li a:hover { background-size: 100% 1.5px; }
+  li a:hover, li a[aria-current='page'] { background-size: 100% 1.5px; }
   @media (max-width: 30rem) {
     .marchio span { display: none; }
     ul { gap: 0 1rem; }

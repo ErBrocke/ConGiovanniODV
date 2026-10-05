@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import Frontespizio from '../components/Frontespizio.astro';
+import Testatina from '../components/Testatina.astro';
+import Folio from '../components/Folio.astro';
+import { tutteLeEdizioni, inCopertina, EMAIL, IBAN, INSTAGRAM } from '../lib/edizioni';
+
+const { edizione: cop } = inCopertina(await tutteLeEdizioni());
+---
+<Base
+  title="Sostieni il Premio · Con Giovanni ODV, Livorno"
+  description="Come sostenere Con Giovanni ODV: bonifico, aiuto per organizzare la serata, e dove seguire gli annunci del Premio Giovanni Capanna."
+  dono={false}
+>
+  <Frontespizio
+    titolo="Come sostenerci"
+    lead="Le donazioni aiutano l’associazione a sostenere giovani artisti, la ricerca sul tumore del pancreas metastatico e le iniziative di solidarietà."
+  />
+
+  <main id="contenuto">
+    <section class="pagina" aria-label="Modi per sostenere l’associazione">
+      <div class="wrap"><Testatina numero={cop.data.numero} /></div>
+      <div class="wrap">
+        <dl class="modi">
+          <div class="modo">
+            <dt>Bonifico</dt>
+            <dd>
+              <p>Intestato a <strong>Con Giovanni ODV</strong>.</p>
+              <p class="iban num" id="iban">{IBAN}</p>
+              <button class="btn copia" type="button" data-copia={IBAN} aria-controls="iban">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="8" y="8" width="12" height="12" /><path d="M16 8V4H4v12h4" /></svg>
+                <span data-etichetta aria-live="polite">Copia IBAN</span>
+              </button>
+            </dd>
+          </div>
+          <div class="modo">
+            <dt>Dai una mano</dt>
+            <dd>
+              <p>Se vuoi aiutare a organizzare la serata o le altre iniziative, scrivici.</p>
+              <p><a class="contatto" href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
+            </dd>
+          </div>
+          <div class="modo">
+            <dt>Seguici</dt>
+            <dd>
+              <p>Annunci, premiati e foto delle serate.</p>
+              <p><a class="contatto" href={INSTAGRAM}>Instagram @con_giovanni</a></p>
+            </dd>
+          </div>
+        </dl>
+      </div>
+      <div class="wrap"><Folio n={7} /></div>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .modi { margin: 0; max-width: 60rem; border-top: 1.5px solid var(--ink); }
+  .modo {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: 0.5rem 2rem;
+    padding-block: 1.5rem 1.75rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  dt {
+    font-weight: 800;
+    font-stretch: 75%;
+    font-size: 1.5rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+  dd { margin: 0; display: grid; gap: 0.6rem; justify-items: start; }
+  .iban {
+    font-weight: 650;
+    font-stretch: 85%;
+    font-size: clamp(1.25rem, 1rem + 1.3vw, 2rem);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    user-select: all;
+    overflow-wrap: anywhere;
+  }
+  .contatto { font-weight: 600; overflow-wrap: anywhere; }
+  @media (max-width: 40rem) {
+    .modo { grid-template-columns: 1fr; }
+  }
+</style>
