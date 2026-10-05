@@ -1,0 +1,126 @@
+---
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/archivo/wdth-italic.css';
+import '@fontsource/courier-prime/400.css';
+import '../styles/global.css';
+import Retro from '../components/Retro.astro';
+import { SITE_NAME, EMAIL, INSTAGRAM } from '../lib/edizioni';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, unknown>[];
+  dono?: boolean;
+}
+
+const {
+  title,
+  description,
+  image = '/og.jpg',
+  imageAlt = 'Con Giovanni ODV: Premio Giovanni Capanna, Livorno',
+  type = 'website',
+  jsonLd = [],
+  dono = true,
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://congiovanniodv.pages.dev');
+const canonical = new URL(Astro.url.pathname, site).href;
+const imageUrl = new URL(image, site).href;
+
+const organizzazione = {
+  '@context': 'https://schema.org',
+  '@type': 'NGO',
+  '@id': new URL('/#associazione', site).href,
+  name: SITE_NAME,
+  alternateName: 'Associazione Con Giovanni ODV',
+  url: site.href,
+  logo: new URL('/logo-500.webp', site).href,
+  email: EMAIL,
+  foundingDate: '2024-11-04',
+  description:
+    'Organizzazione di volontariato fondata dalla famiglia e dagli amici di Giovanni Capanna. Promuove il Premio Giovanni Capanna per giovani artisti livornesi di musica e teatro.',
+  address: { '@type': 'PostalAddress', addressLocality: 'Livorno', addressRegion: 'LI', addressCountry: 'IT' },
+  sameAs: [INSTAGRAM],
+};
+const schemi = [organizzazione, ...jsonLd];
+---
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#020e7e" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {schemi.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  </head>
+  <body>
+    <a class="skip" href="#contenuto">Vai al contenuto</a>
+    <slot />
+    <Retro dono={dono} />
+
+    <script>
+      // The ticket: tears along its perforation while the calendar file downloads.
+      for (const t of document.querySelectorAll<HTMLAnchorElement>('[data-biglietto]')) {
+        const fine = t.dataset.fine ? Date.parse(t.dataset.fine) : NaN;
+        if (!Number.isNaN(fine) && Date.now() > fine && t.dataset.dopo) {
+          // The evening is over: the ticket now leads to the edition's page.
+          t.removeAttribute('download');
+          t.href = t.dataset.dopo;
+          const azione = t.querySelector('[data-azione]');
+          const nota = t.querySelector('[data-nota]');
+          if (azione) azione.textContent = 'Com’è andata';
+          if (nota) nota.textContent = 'il programma della serata';
+          continue;
+        }
+        t.addEventListener('click', () => {
+          t.classList.remove('strappato');
+          void t.offsetWidth;
+          t.classList.add('strappato');
+          const nota = t.querySelector('[data-nota]');
+          if (nota) nota.textContent = 'file scaricato';
+        });
+      }
+
+      // Copy the IBAN without having to select it on a phone.
+      for (const b of document.querySelectorAll<HTMLButtonElement>('[data-copia]')) {
+        const etichetta = b.querySelector('[data-etichetta]');
+        const originale = etichetta?.textContent ?? '';
+        b.addEventListener('click', async () => {
+          const testo = (b.dataset.copia ?? '').replace(/\s+/g, '');
+          try {
+            await navigator.clipboard.writeText(testo);
+            if (etichetta) etichetta.textContent = 'IBAN copiato';
+          } catch {
+            const sorgente = document.getElementById(b.getAttribute('aria-controls') ?? '');
+            if (sorgente) getSelection()?.selectAllChildren(sorgente);
+            if (etichetta) etichetta.textContent = 'Selezionato: copia con il menu';
+          }
+          b.dataset.stato = 'fatto';
+          window.setTimeout(() => {
+            if (etichetta) etichetta.textContent = originale;
+            delete b.dataset.stato;
+          }, 2600);
+        });
+      }
+    </script>
+  </body>
+</html>
