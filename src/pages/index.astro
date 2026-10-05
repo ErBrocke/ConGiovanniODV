@@ -24,27 +24,27 @@ const daAnnunciare = futura && (!cop.data.ora || cop.data.premiati.length === 0)
 const esempio = edizioni.find((e) => e.data.programma.length > 0);
 const site = Astro.site ?? new URL('https://congiovanniodv.pages.dev');
 const sommario = [
-  { href: '/giovanni/', titolo: 'A Giovanni', testo: 'Chi era, con le foto di famiglia.', pagina: 4 },
-  { href: '/premio/', titolo: 'Il Premio', testo: 'Come nasce e tutte le edizioni, con i premiati.', pagina: 5 },
+  { href: '/giovanni/', titolo: 'A Giovanni', testo: 'Chi era, con le foto di famiglia.', pagina: 5 },
+  { href: '/premio/', titolo: 'Il Premio', testo: 'Come nasce e tutte le edizioni, con i premiati.', pagina: 6 },
   { href: '/sostieni/', titolo: 'Come sostenerci', testo: 'Bonifico, aiuto, e dove seguirci.', pagina: 7 },
 ];
 ---
 <Base
-  title="Premio Giovanni Capanna · Con Giovanni ODV, Livorno"
-  description={`Con Giovanni ODV ricorda Giovanni Capanna con il Premio per giovani artisti livornesi di musica e teatro. ${romano(cop.data.numero)} edizione: ${dataLunga(cop.data.data).toLowerCase()}, Auditorium del Conservatorio Mascagni, ingresso libero.`}
+  title="Con Giovanni ODV · Associazione in ricordo di Giovanni Capanna, Livorno"
+  description={`Con Giovanni ODV ricorda Giovanni Capanna: ricerca sul tumore al pancreas metastatico, sostegno agli artisti, impegno della comunità e il Premio Giovanni Capanna. Prossimo Premio: ${dataLunga(cop.data.data).toLowerCase()}, Auditorium del Conservatorio Mascagni, ingresso libero.`}
   jsonLd={[eventoSchema(cop, site)]}
   dono={false}
 >
   <!-- Copertina: this year's programme. -->
   <div class="ink copertina">
     <div class="wrap copertina-wrap">
-      <Testata presenta />
+      <Testata />
 
       <div class="frontespizio">
         <h1 id="titolo">
-          <span>Premio</span>
+          <span>Con</span>
           <span>Giovanni</span>
-          <span>Capanna</span>
+          <span>ODV</span>
         </h1>
         <img
           class="logo"
@@ -63,7 +63,7 @@ const sommario = [
           </p>
           <p class="dove">Auditorium del Conservatorio Mascagni, Livorno</p>
           <p class="typed nota">
-            {romano(cop.data.numero)} edizione · ingresso libero{daAnnunciare && <> · orario e premiati saranno annunciati qui</>}
+            {romano(cop.data.numero)} Premio Giovanni Capanna · ingresso libero{daAnnunciare && <> · orario e premiati saranno annunciati qui</>}
           </p>
         </div>
         <div class="azioni">
@@ -75,6 +75,36 @@ const sommario = [
   </div>
 
   <main id="contenuto">
+    <!-- L'associazione: what Con Giovanni ODV is for. -->
+    <section class="pagina associazione" aria-labelledby="assoc-t">
+      <div class="wrap"><Testatina numero={cop.data.numero} /></div>
+      <div class="wrap due">
+        <div class="intro">
+          <h2 id="assoc-t" class="display">L’associazione</h2>
+          <p class="lead">In ricordo di Giovanni, l’associazione è dedicata a promuovere la ricerca sul tumore al pancreas metastatico e a celebrare l’eccellenza nelle arti, sostenendo artisti e attori, favorendo l’impegno della comunità e creando un impatto duraturo.</p>
+        </div>
+        <dl class="attivita">
+          <div class="voce-attivita">
+            <dt>Premio annuale</dt>
+            <dd>Ogni anno il Premio Giovanni Capanna va a giovani artisti livornesi di musica e teatro. <a href="/premio/">Il Premio e le edizioni</a></dd>
+          </div>
+          <div class="voce-attivita">
+            <dt>Supporto artistico</dt>
+            <dd>Sostegno ad artisti e attori, e attenzione allo studio e alle attività culturali.</dd>
+          </div>
+          <div class="voce-attivita">
+            <dt>Coinvolgimento della comunità</dt>
+            <dd>Iniziative di solidarietà e impegno condiviso, per un impatto che duri. <a href="/sostieni/">Dai una mano</a></dd>
+          </div>
+          <div class="voce-attivita">
+            <dt>Ricerca medica</dt>
+            <dd>Promuove la ricerca sul tumore al pancreas metastatico.</dd>
+          </div>
+        </dl>
+      </div>
+      <div class="wrap"><Folio n={2} /></div>
+    </section>
+
     <!-- La serata: a real running order, not a promise. -->
     {esempio && (
       <section class="pagina serata" aria-labelledby="serata-t">
@@ -92,7 +122,7 @@ const sommario = [
             </p>
           </div>
         </div>
-        <div class="wrap"><Folio n={2} /></div>
+        <div class="wrap"><Folio n={3} /></div>
       </section>
     )}
 
@@ -118,7 +148,7 @@ const sommario = [
           ))}
         </ol>
       </div>
-      <div class="wrap"><Folio n={3} /></div>
+      <div class="wrap"><Folio n={4} /></div>
     </section>
   </main>
 </Base>
@@ -186,6 +216,25 @@ const sommario = [
     font-stretch: 88%;
   }
 
+  /* ---------- Associazione ---------- */
+  .associazione .display { font-size: clamp(2.5rem, 1.4rem + 3.6vw, 4.5rem); }
+  .attivita { margin: 0; border-top: 1.5px solid var(--ink); }
+  .voce-attivita {
+    display: grid;
+    grid-template-columns: 13rem minmax(0, 1fr);
+    gap: 0.4rem 2rem;
+    padding-block: 1.4rem 1.6rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .attivita dt {
+    font-weight: 800;
+    font-stretch: 75%;
+    font-size: 1.5rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+  .attivita dd { margin: 0; max-width: var(--measure); }
+
   /* ---------- Serata ---------- */
   .serata .programma { padding-top: 0.4rem; }
   .didascalia { color: var(--ink-2); margin-top: 0.9rem; font-size: 0.875rem; }
@@ -222,6 +271,7 @@ const sommario = [
     h1 span:nth-child(2) { padding-left: 0.3em; }
     .locandina { padding-bottom: var(--space-3); }
     .azioni { width: 100%; }
+    .voce-attivita { grid-template-columns: 1fr; }
     .voce .fill { display: none; }
     .voce { justify-content: space-between; }
   }
