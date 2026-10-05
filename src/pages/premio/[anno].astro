@@ -1,0 +1,257 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Testata from '../../components/Testata.astro';
+import Biglietto from '../../components/Biglietto.astro';
+import Scaletta from '../../components/Scaletta.astro';
+import Testatina from '../../components/Testatina.astro';
+import Folio from '../../components/Folio.astro';
+import {
+  tutteLeEdizioni,
+  romano,
+  dataLunga,
+  dataBreve,
+  ora,
+  anno,
+  isoGiorno,
+  SEDE,
+  type Edizione,
+} from '../../lib/edizioni';
+import { eventoSchema } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const edizioni = await tutteLeEdizioni(); // newest first
+  return edizioni.map((e, i) => ({
+    params: { anno: String(anno(e)) },
+    props: { e, successiva: edizioni[i - 1], precedente: edizioni[i + 1] },
+  }));
+}
+
+interface Props {
+  e: Edizione;
+  successiva?: Edizione;
+  precedente?: Edizione;
+}
+const { e, successiva, precedente } = Astro.props;
+const { Content } = await render(e);
+const n = romano(e.data.numero);
+const oggi = new Date();
+const futura = e.data.data.valueOf() >= Date.UTC(oggi.getUTCFullYear(), oggi.getUTCMonth(), oggi.getUTCDate());
+const site = Astro.site ?? new URL('https://congiovanniodv.pages.dev');
+const titolo = `${n} Premio Giovanni Capanna, ${dataBreve(e.data.data)}`;
+const descrizione = e.data.premiati.length
+  ? `${n} edizione del Premio Giovanni Capanna, ${dataBreve(e.data.data)} a Livorno. Premiati: ${e.data.premiati.map((p) => `${p.nome} (${p.disciplina})`).join(', ')}.`
+  : `${n} edizione del Premio Giovanni Capanna: ${dataLunga(e.data.data).toLowerCase()}, ${e.data.luogo}. ${e.data.sintesi}`;
+---
+<Base title={`${titolo} · Con Giovanni ODV`} description={descrizione} type="article" jsonLd={[eventoSchema(e, site)]}>
+  <div class="ink copertina">
+    <div class="wrap">
+      <Testata />
+      <div class="frontespizio">
+        <p class="numero" aria-hidden="true">{n}</p>
+        <div class="titolo">
+          <h1><span class="sr-only">{n} edizione del </span>Premio Giovanni Capanna</h1>
+          <p class="quando">
+            <time datetime={isoGiorno(e.data.data)}>{dataLunga(e.data.data)}</time>{ora(e) && <>, {ora(e)}</>}
+          </p>
+          <p class="dove">
+            {e.data.luogo} · <a href={SEDE.mappa}>Indicazioni</a>
+          </p>
+        </div>
+      </div>
+      {futura && (
+        <div class="azioni">
+          <Biglietto edizione={e} />
+        </div>
+      )}
+    </div>
+  </div>
+
+  <main id="contenuto" class="pagina">
+    <div class="wrap"><Testatina numero={e.data.numero} /></div>
+    <div class="wrap corpo">
+      <div class="colonna">
+        <p class="lead">{e.data.sintesi}</p>
+        <div class="racconto"><Content /></div>
+      </div>
+
+      <div class="colonna">
+        {e.data.programma.length > 0 && (
+          <section aria-labelledby="prog-t" class="blocco">
+            <h2 id="prog-t">Programma della serata</h2>
+            <Scaletta programma={e.data.programma} />
+          </section>
+        )}
+
+        <section aria-labelledby="prem-t" class="blocco">
+          <h2 id="prem-t">I premiati</h2>
+          {e.data.premiati.length > 0 ? (
+            <ul class="premiati">
+              {e.data.premiati.map((p) => (
+                <li>
+                  <p class="nome">{p.nome}</p>
+                  <p class="typed disciplina">{p.disciplina}</p>
+                  {p.nota && <p class="nota">{p.nota}</p>}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="vuoto">I nomi dei premiati saranno pubblicati qui prima della serata. Conosci un giovane artista livornese? <a href="mailto:associazionecongiovanni@gmail.com">Scrivici</a>.</p>
+          )}
+        </section>
+
+        {e.data.note.length > 0 && (
+          <ul class="note typed">
+            {e.data.note.map((t) => <li>{t}</li>)}
+          </ul>
+        )}
+
+        {e.data.stampa.length > 0 && (
+          <section aria-labelledby="stampa-t" class="blocco">
+            <h2 id="stampa-t">Rassegna stampa</h2>
+            <ul class="stampa">
+              {e.data.stampa.map((s) => (
+                <li>
+                  <a href={s.url}>{s.titolo}</a>
+                  <span class="typed">{s.testata} · <time datetime={isoGiorno(s.data)}>{dataBreve(s.data)}</time></span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
+    </div>
+
+    <nav class="wrap" aria-label="Altre edizioni"><div class="sfoglia">
+      {precedente ? (
+        <a class="prec" href={`/premio/${anno(precedente)}/`}>
+          <span class="nr">{romano(precedente.data.numero)} · {anno(precedente)}</span>
+          <span class="typed">edizione precedente</span>
+        </a>
+      ) : <span />}
+      <a class="tutte" href="/#edizioni">Tutte le edizioni</a>
+      {successiva ? (
+        <a class="succ" href={`/premio/${anno(successiva)}/`}>
+          <span class="nr">{romano(successiva.data.numero)} · {anno(successiva)}</span>
+          <span class="typed">edizione successiva</span>
+        </a>
+      ) : <span />}
+      </div>
+      <Folio n={2} />
+    </nav>
+  </main>
+</Base>
+
+<style>
+  .copertina { padding-bottom: var(--space-4); }
+  .frontespizio {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: end;
+    gap: var(--space-2) clamp(1.5rem, 4vw, 3.5rem);
+    padding-top: var(--space-5);
+  }
+  .numero {
+    font-weight: 850;
+    font-stretch: 62%;
+    font-size: clamp(7rem, 4rem + 14vw, 17rem);
+    line-height: 0.74;
+    letter-spacing: -0.02em;
+    margin-bottom: -0.04em;
+  }
+  .titolo { display: grid; gap: 0.6rem; padding-bottom: 0.35rem; }
+  h1 {
+    font-size: clamp(2.5rem, 1.5rem + 4vw, 5.25rem);
+    font-stretch: 64%;
+    font-weight: 850;
+    line-height: 0.88;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .quando {
+    font-weight: 750;
+    font-stretch: 80%;
+    font-size: clamp(1.375rem, 1.1rem + 1vw, 2rem);
+    line-height: 1.1;
+  }
+  .dove { color: var(--paper-2); }
+  .dove a { color: var(--paper); }
+  .azioni {
+    margin-top: var(--space-4);
+    padding-top: var(--space-3);
+    border-top: 1.5px solid var(--paper);
+  }
+
+  .pagina { padding-block: var(--space-3); }
+  .corpo {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-4) clamp(2rem, 6vw, 6rem);
+    align-items: start;
+  }
+  .colonna { display: grid; gap: var(--space-4); }
+  @media (min-width: 60rem) {
+    .colonna:first-child { position: sticky; top: var(--space-4); }
+  }
+  .lead {
+    font-size: clamp(1.375rem, 1.1rem + 0.9vw, 1.75rem);
+    line-height: 1.35;
+    font-stretch: 94%;
+    font-weight: 500;
+    max-width: 30rem;
+  }
+  .racconto :global(p) { max-width: var(--measure); margin-bottom: 1em; }
+  .racconto:empty { display: none; }
+
+  .blocco { display: grid; gap: 1rem; }
+  h2 {
+    font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.75rem);
+    font-stretch: 70%;
+    font-weight: 850;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+  .premiati { margin: 0; padding: 0; list-style: none; border-top: 1.5px solid var(--ink); }
+  .premiati li { padding-block: 1.1rem 1.25rem; border-bottom: 1px solid var(--rule); }
+  .nome {
+    font-weight: 750;
+    font-stretch: 80%;
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+    line-height: 1.05;
+  }
+  .disciplina { color: var(--ink-2); margin-top: 0.15rem; }
+  .premiati .nota { margin-top: 0.5rem; max-width: var(--measure); }
+  .vuoto { max-width: var(--measure); padding-top: 1rem; border-top: 1.5px solid var(--ink); }
+
+  .note { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.5rem; color: var(--ink-2); }
+
+  .stampa { margin: 0; padding: 0; list-style: none; display: grid; gap: 1rem; }
+  .stampa li { display: grid; gap: 0.15rem; }
+  .stampa a { font-weight: 600; }
+  .stampa .typed { color: var(--ink-2); font-size: 0.875rem; }
+
+  .sfoglia {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    margin-top: var(--space-5);
+    padding-top: var(--space-3);
+    border-top: 1.5px solid var(--ink);
+  }
+  .sfoglia a { text-decoration: none; display: grid; gap: 0.1rem; min-height: 2.75rem; align-content: center; }
+  .sfoglia .typed { color: var(--ink-2); font-size: 0.875rem; }
+  .sfoglia .nr { font-weight: 800; font-stretch: 72%; font-size: 1.5rem; line-height: 1; margin-bottom: 0.2rem; }
+  .sfoglia a:hover .nr { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.15em; }
+  .succ { text-align: right; justify-items: end; }
+  .tutte { font-weight: 600; text-decoration: underline !important; }
+
+  @media (max-width: 60rem) {
+    .corpo { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 40rem) {
+    .frontespizio { grid-template-columns: 1fr; padding-top: var(--space-4); }
+    .sfoglia { grid-template-columns: 1fr 1fr; }
+    .tutte { grid-column: 1 / -1; grid-row: 2; justify-self: center; }
+  }
+</style>
