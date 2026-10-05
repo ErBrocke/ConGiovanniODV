@@ -1,0 +1,65 @@
+---
+interface Props {
+  presenta?: boolean;
+}
+const { presenta = false } = Astro.props;
+const voci = [
+  { href: '/#giovanni', label: 'Giovanni' },
+  { href: '/#premio', label: 'Il Premio' },
+  { href: '/#edizioni', label: 'Edizioni' },
+  { href: '/#sostieni', label: 'Sostieni' },
+];
+---
+<header class="testata">
+  <a class="marchio typed" href="/">Con Giovanni ODV{presenta && <span>&nbsp;presenta</span>}</a>
+  <nav aria-label="Sezioni del sito">
+    <ul>
+      {voci.map((v) => <li><a href={v.href}>{v.label}</a></li>)}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .testata {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem 2rem;
+    padding-block: 0.75rem;
+    border-bottom: 1px solid var(--rule-ink);
+  }
+  .marchio {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-size: 1rem;
+    text-decoration: none;
+  }
+  .marchio span { color: var(--paper-2); }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 clamp(1rem, 2.5vw, 2rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-weight: 600;
+    font-stretch: 88%;
+    font-size: 1rem;
+    text-decoration: none;
+    background: linear-gradient(currentColor, currentColor) left calc(100% - 0.7rem) / 0 1.5px no-repeat;
+    transition: background-size 0.3s var(--ease-out);
+  }
+  li a:hover { background-size: 100% 1.5px; }
+  @media (max-width: 30rem) {
+    .marchio span { display: none; }
+    ul { gap: 0 1rem; }
+    li a { font-size: 0.9375rem; }
+  }
+</style>

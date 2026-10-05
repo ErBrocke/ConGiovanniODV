@@ -1,0 +1,77 @@
+---
+// A running order, set as in a printed programme.
+import type { Edizione } from '../lib/edizioni';
+interface Props {
+  programma: Edizione['data']['programma'];
+}
+const { programma } = Astro.props;
+---
+<ol class="scaletta">
+  {programma.map((v) => (
+    <li>
+      <h3 class="voce">{v.voce}</h3>
+      {v.brani.length > 0 && (
+        <ul>
+          {v.brani.map((b) => (
+            <li class="brano">
+              {b.autore && <span class="autore">{b.autore}</span>}
+              <span class="riga">
+                <span class="titolo">{b.titolo}</span>
+                {b.dettaglio && (
+                  <>
+                    <span class="fill" aria-hidden="true" />
+                    <span class="dettaglio typed">{b.dettaglio}</span>
+                  </>
+                )}
+              </span>
+              {b.credito && <span class="credito typed">{b.credito}</span>}
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
+  ))}
+</ol>
+
+<style>
+  .scaletta {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1.5px solid currentColor;
+  }
+  .scaletta > li {
+    padding-block: 1.25rem 1.4rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .voce {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.125rem);
+    font-stretch: 78%;
+    font-weight: 750;
+    line-height: 1.05;
+  }
+  ul { margin: 0.75rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.9rem; }
+  .autore {
+    display: block;
+    font-weight: 650;
+    font-stretch: 90%;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.8125em;
+  }
+  .riga { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.6rem; }
+  .titolo { font-style: italic; flex: 0 1 auto; }
+  .fill {
+    flex: 1 1 1.5rem;
+    min-width: 1.5rem;
+    border-bottom: 2px dotted currentColor;
+    opacity: 0.5;
+    transform: translateY(-0.3em);
+  }
+  .dettaglio { color: var(--ink-2); white-space: nowrap; }
+  .credito { display: block; margin-top: 0.2rem; color: var(--ink-2); font-size: 0.875rem; }
+  @media (max-width: 40rem) {
+    .fill { display: none; }
+    .dettaglio { flex-basis: 100%; white-space: normal; }
+  }
+</style>

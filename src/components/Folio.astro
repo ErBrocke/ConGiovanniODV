@@ -1,0 +1,18 @@
+---
+// Folio: the page number at the foot of each printed page.
+interface Props {
+  n: number;
+}
+const { n } = Astro.props;
+---
+<p class="folio typed" aria-hidden="true">— {n} —</p>
+
+<style>
+  .folio {
+    margin: var(--space-5) 0 0;
+    text-align: center;
+    color: var(--ink-2);
+    font-size: 0.8125rem;
+  }
+  :global(.ink) .folio { color: var(--paper-2); }
+</style>
