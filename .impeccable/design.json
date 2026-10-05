@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-05T20:30:00Z",
+  "title": "Design System: Con Giovanni ODV",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "primary",
+        "displayName": "Giovanni's Ultramarine",
+        "canonical": "#020e7e",
+        "tonalRamp": [
+          "#01073c",
+          "#020e7e",
+          "#3e479b",
+          "#565ea6",
+          "#aaaece",
+          "#b6bad4",
+          "#dcdee8",
+          "#f2f3f1"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Uncoated White Card",
+        "canonical": "#f2f3f1",
+        "tonalRamp": [
+          "#01073c",
+          "#020e7e",
+          "#3e479b",
+          "#565ea6",
+          "#aaaece",
+          "#b6bad4",
+          "#dcdee8",
+          "#f2f3f1"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink Screened 75%",
+        "canonical": "#3e479b",
+        "tonalRamp": [
+          "#01073c",
+          "#020e7e",
+          "#3e479b",
+          "#565ea6",
+          "#aaaece",
+          "#b6bad4",
+          "#dcdee8",
+          "#f2f3f1"
+        ]
+      },
+      "paper-2": {
+        "role": "neutral",
+        "displayName": "Card Screened over Ink",
+        "canonical": "#b6bad4",
+        "tonalRamp": [
+          "#01073c",
+          "#020e7e",
+          "#3e479b",
+          "#565ea6",
+          "#aaaece",
+          "#b6bad4",
+          "#dcdee8",
+          "#f2f3f1"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Ink at 30%",
+        "canonical": "#aaaece",
+        "tonalRamp": [
+          "#01073c",
+          "#020e7e",
+          "#3e479b",
+          "#565ea6",
+          "#aaaece",
+          "#b6bad4",
+          "#dcdee8",
+          "#f2f3f1"
+        ]
+      },
+      "rule-ink": {
+        "role": "neutral",
+        "displayName": "Card at 35% over Ink",
+        "canonical": "#565ea6",
+        "tonalRamp": [
+          "#01073c",
+          "#020e7e",
+          "#3e479b",
+          "#565ea6",
+          "#aaaece",
+          "#b6bad4",
+          "#dcdee8",
+          "#f2f3f1"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "cover": {
+        "displayName": "Cover",
+        "purpose": "Home cover title only; uppercase; recorded override above the 6rem display ceiling."
+      },
+      "numeral": {
+        "displayName": "Edition Numeral",
+        "purpose": "Roman numeral on edition covers only; recorded override above the 6rem display ceiling."
+      },
+      "display": {
+        "displayName": "Display",
+        "purpose": "Uppercase section titles on pages and inserts, max 6rem."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Performer and winner names, cover date line."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Ticket action, giving-box heading, giving-method terms, browse links."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Opening paragraph of a page, max 36rem."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text, 36rem measure."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase composer names in the running order."
+      },
+      "typed": {
+        "displayName": "Typed",
+        "purpose": "Courier Prime notes, captions, credits, running head, folio, colophon."
+      }
+    },
+    "shadows": [
+      {
+        "name": "paper-ticket",
+        "value": "drop-shadow(0 0.6rem 1.2rem rgb(0 0 20 / 0.35))",
+        "purpose": "Filter on the cover ticket only; the system is otherwise flat."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "All state transitions."
+      },
+      {
+        "name": "button-fill",
+        "value": "0.2s",
+        "purpose": "Button background/colour inversion."
+      },
+      {
+        "name": "ticket-tear",
+        "value": "0.7s transform, 0.3s border-color",
+        "purpose": "Stub tears along the perforation and stays torn; reduced motion jumps to the end state."
+      },
+      {
+        "name": "nav-rule",
+        "value": "0.3s background-size",
+        "purpose": "Masthead link rule draws in from the left."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "masthead-compact",
+        "value": "30rem"
+      },
+      {
+        "name": "back-cover-single",
+        "value": "34rem"
+      },
+      {
+        "name": "mobile",
+        "value": "40rem"
+      },
+      {
+        "name": "spread-collapse",
+        "value": "60rem"
+      },
+      {
+        "name": "back-cover-two",
+        "value": "64rem"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Ruled Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Square ruled box, ink on card; fills and inverts on hover.",
+      "html": "<button class=\"ds-btn\" type=\"button\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" aria-hidden=\"true\"><rect x=\"8\" y=\"8\" width=\"12\" height=\"12\"/><path d=\"M16 8V4H4v12h4\"/></svg><span>Copia IBAN</span></button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;gap:.6rem;min-height:3rem;padding:0 1.25rem;border:1.5px solid currentColor;border-radius:0;background:transparent;color:#020e7e;font-family:'Archivo Variable','Arial Narrow',Arial,sans-serif;font-size:1.0625rem;font-weight:650;font-stretch:90%;letter-spacing:.01em;cursor:pointer;transition:background-color .2s cubic-bezier(.16,1,.3,1),color .2s cubic-bezier(.16,1,.3,1)}.ds-btn svg{width:1.1em;height:1.1em}.ds-btn:hover{background:#020e7e;color:#f2f3f1}.ds-btn:focus-visible{outline:2px solid currentColor;outline-offset:4px}"
+    },
+    {
+      "name": "Ruled Button on Ink",
+      "kind": "button",
+      "refersTo": "button-on-ink",
+      "description": "The same button on an ink surface; fills with card on hover.",
+      "html": "<div class=\"ds-ink\"><button class=\"ds-btn-ink\" type=\"button\">Com’è andata la III edizione</button></div>",
+      "css": ".ds-ink{background:#020e7e;padding:1.5rem}.ds-btn-ink{display:inline-flex;align-items:center;min-height:3rem;padding:0 1.25rem;border:1.5px solid #f2f3f1;border-radius:0;background:transparent;color:#f2f3f1;font-family:'Archivo Variable','Arial Narrow',Arial,sans-serif;font-size:1.0625rem;font-weight:650;font-stretch:90%;cursor:pointer;transition:background-color .2s cubic-bezier(.16,1,.3,1),color .2s cubic-bezier(.16,1,.3,1)}.ds-btn-ink:hover{background:#f2f3f1;color:#020e7e}.ds-btn-ink:focus-visible{outline:2px solid #f2f3f1;outline-offset:4px}"
+    },
+    {
+      "name": "Masthead",
+      "kind": "nav",
+      "refersTo": "",
+      "description": "Typed association name left, condensed section links right, rule-ink hairline below; on the ink cover.",
+      "html": "<header class=\"ds-mast\"><a class=\"ds-mast-name\" href=\"#\">Con Giovanni ODV <span>presenta</span></a><nav><a href=\"#\">Giovanni</a><a href=\"#\">Il Premio</a><a href=\"#\">Edizioni</a><a href=\"#\">Sostieni</a></nav></header>",
+      "css": ".ds-mast{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.25rem 2rem;padding:.75rem 1.5rem;background:#020e7e;color:#f2f3f1;border-bottom:1px solid #565ea6}.ds-mast-name{font-family:'Courier Prime','Courier New',monospace;font-size:1rem;color:inherit;text-decoration:none}.ds-mast-name span{color:#b6bad4}.ds-mast nav{display:flex;gap:2rem}.ds-mast nav a{display:inline-flex;align-items:center;min-height:2.75rem;font-family:'Archivo Variable','Arial Narrow',Arial,sans-serif;font-weight:600;font-stretch:88%;color:inherit;text-decoration:none;background:linear-gradient(currentColor,currentColor) left calc(100% - .7rem)/0 1.5px no-repeat;transition:background-size .3s cubic-bezier(.16,1,.3,1)}.ds-mast nav a:hover{background-size:100% 1.5px}.ds-mast a:focus-visible{outline:2px solid currentColor;outline-offset:4px}"
+    },
+    {
+      "name": "Ticket",
+      "kind": "custom",
+      "refersTo": "ticket",
+      "description": "Perforated card ticket on the ink cover; the stub tears away on activation and stays torn.",
+      "html": "<div class=\"ds-ink\"><a class=\"ds-ticket\" href=\"#\"><span class=\"ds-t-body\"><span class=\"ds-t-act\">Segna la data</span><span class=\"ds-t-when\">sab 28.11.2026 <em>ingresso libero</em></span></span><span class=\"ds-t-stub\"><span>IV</span></span></a></div>",
+      "css": ".ds-ink{background:#020e7e;padding:2rem}.ds-ticket{--n:.7rem;display:inline-grid;grid-template-columns:1fr 4.75rem;min-width:21rem;color:#020e7e;text-decoration:none;filter:drop-shadow(0 .6rem 1.2rem rgb(0 0 20/.35))}.ds-t-body,.ds-t-stub{background:#f2f3f1;-webkit-mask:radial-gradient(circle var(--n) at var(--x) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle var(--n) at var(--x) 100%,#0000 98%,#000) bottom/100% 51% no-repeat;mask:radial-gradient(circle var(--n) at var(--x) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle var(--n) at var(--x) 100%,#0000 98%,#000) bottom/100% 51% no-repeat}.ds-t-body{--x:100%;display:grid;gap:.35rem;padding:1rem 1.25rem;font-family:'Archivo Variable','Arial Narrow',Arial,sans-serif}.ds-t-act{font-weight:800;font-stretch:75%;font-size:1.75rem;line-height:1}.ds-t-when{font-weight:500;font-size:.9375rem}.ds-t-when em{font-style:normal;font-family:'Courier Prime',monospace;font-size:.875rem;color:#3e479b;margin-left:.75rem}.ds-t-stub{--x:0;display:grid;place-items:center;border-left:2px dotted #020e7e;transform-origin:0 100%;transition:transform .6s cubic-bezier(.16,1,.3,1),border-color .4s cubic-bezier(.16,1,.3,1)}.ds-t-stub span{font-family:'Archivo Variable','Arial Narrow',sans-serif;font-weight:850;font-stretch:62%;font-size:2.5rem;line-height:1}.ds-ticket:hover .ds-t-stub{transform:translate(.2rem,-.1rem) rotate(2deg)}.ds-ticket:active .ds-t-stub{transform:translate(.9rem,.45rem) rotate(9deg);border-left-color:transparent}.ds-ticket:focus-visible{outline:2px solid #f2f3f1;outline-offset:5px}"
+    },
+    {
+      "name": "Running Order",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Programme listing: performer, uppercase composer, italic work joined by a dotted leader to a typed tempo.",
+      "html": "<ol class=\"ds-ro\"><li><h3>Sophia Rizzo, pianoforte</h3><p class=\"ds-ro-a\">Alexander Scriabin</p><p class=\"ds-ro-r\"><i>Sonata per pianoforte n. 2, op. 19</i><span class=\"ds-ro-f\"></span><span class=\"ds-ro-d\">Andante · Presto</span></p></li><li><h3>Claudio Monteleone, attore</h3><p class=\"ds-ro-r\"><i>Tagliagole</i><span class=\"ds-ro-f\"></span><span class=\"ds-ro-d\">monologo</span></p></li></ol>",
+      "css": ".ds-ro{margin:0;padding:0;list-style:none;border-top:1.5px solid #020e7e;color:#020e7e;background:#f2f3f1;font-family:'Archivo Variable','Arial Narrow',Arial,sans-serif}.ds-ro li{padding:1.25rem 0 1.4rem;border-bottom:1px solid #aaaece}.ds-ro h3{margin:0 0 .75rem;font-size:2rem;font-weight:750;font-stretch:78%;line-height:1.05}.ds-ro-a{margin:0;font-weight:650;font-stretch:90%;font-size:.8125em;letter-spacing:.04em;text-transform:uppercase}.ds-ro-r{margin:0;display:flex;align-items:baseline;gap:.6rem}.ds-ro-f{flex:1 1 1.5rem;border-bottom:2px dotted currentColor;opacity:.5;transform:translateY(-.3em)}.ds-ro-d{font-family:'Courier Prime',monospace;color:#3e479b;white-space:nowrap}"
+    },
+    {
+      "name": "Running Head and Folio",
+      "kind": "custom",
+      "refersTo": "running-head",
+      "description": "Typed page furniture: fixed running head at the top of a page, centred folio at its foot.",
+      "html": "<div class=\"ds-page\"><div class=\"ds-rh\"><span>Programma di sala</span><span>IV Premio Giovanni Capanna</span></div><p class=\"ds-txt\">Il Premio si consegna sul palco dell’Auditorium.</p><p class=\"ds-folio\">— 2 —</p></div>",
+      "css": ".ds-page{background:#f2f3f1;color:#020e7e;padding:1rem 1.5rem}.ds-rh{display:flex;justify-content:space-between;gap:1.5rem;padding:1rem 0 .6rem;border-bottom:1px solid #aaaece;color:#3e479b;font-family:'Courier Prime',monospace;font-size:.8125rem;margin-bottom:2rem}.ds-txt{font-family:'Archivo Variable',Arial,sans-serif}.ds-folio{margin-top:2rem;text-align:center;color:#3e479b;font-family:'Courier Prime',monospace;font-size:.8125rem}"
+    },
+    {
+      "name": "Giving Box",
+      "kind": "card",
+      "refersTo": "giving-box",
+      "description": "Card-ruled square box on the ink back cover with the IBAN and copy button.",
+      "html": "<div class=\"ds-ink\"><div class=\"ds-give\"><h2>Sostieni il Premio</h2><p>Bonifico intestato a Con Giovanni ODV</p><p class=\"ds-iban\">IT34 O010 3013 9000 0000 7413 519</p><button class=\"ds-give-btn\" type=\"button\">Copia IBAN</button></div></div>",
+      "css": ".ds-ink{background:#020e7e;padding:2rem;color:#f2f3f1;font-family:'Archivo Variable','Arial Narrow',Arial,sans-serif}.ds-give{display:grid;gap:.5rem;justify-items:start;padding:1.5rem;border:1.5px solid #f2f3f1;max-width:22rem}.ds-give h2{margin:0;font-size:1.5rem;font-weight:800;font-stretch:75%;line-height:1.05;text-transform:uppercase}.ds-give p{margin:0;color:#b6bad4}.ds-give .ds-iban{color:#f2f3f1;font-weight:650;font-stretch:85%;font-size:1.25rem;letter-spacing:.02em}.ds-give-btn{margin-top:.4rem;min-height:3rem;padding:0 1.25rem;border:1.5px solid #f2f3f1;background:transparent;color:#f2f3f1;font:inherit;font-weight:650;font-stretch:90%;cursor:pointer;transition:background-color .2s,color .2s}.ds-give-btn:hover{background:#f2f3f1;color:#020e7e}.ds-give-btn:focus-visible{outline:2px solid #f2f3f1;outline-offset:4px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Programma di Sala",
+    "overview": "**Creative North Star: \"The Programma di Sala\"**\n\nThe site is the printed programme of the Premio evening: a one-ink job in Giovanni's ultramarine on cool, uncoated white card, in the manner of Italian modernist theatre programmes. Covers and inserts are drenched in ink; interior pages are card printed in ink. There is no second colour, no gradient, no tint that a single printing plate could not make by screening.\n\nType does the work. Archivo, a variable-width grotesque, is squeezed to its condensed, heavy end for titles and opened to normal width for reading; Courier Prime is the stage manager's typewriter for notes, captions, credits and page furniture, echoing the typewriter ring of the logo. Structure comes from print devices, not from boxes: hairline rules, heavier opening rules, dotted leaders, a typed running head at the top of each page and a folio at its foot.\n\nThe page sequence reads like the object in hand: ink cover, card pages, a full-bleed duotone plate, an ink insert, card back pages, an ink back cover with the colophon. The one tactile moment is the paper ticket on the cover, which tears along its perforation when used.",
+    "keyCharacteristics": [
+      "Two materials only: ultramarine ink and white card; every photograph a one-ink duotone.",
+      "Condensed heavy uppercase Archivo for titles, normal-width Archivo for text, Courier Prime for typed notes.",
+      "Square corners everywhere; rules, leaders and running heads instead of cards.",
+      "Ink and card surfaces alternate like the spreads of a programme.",
+      "Display type runs very large on covers only; interior headings stay at or under 6rem."
+    ],
+    "rules": [
+      {
+        "name": "The One Ink Rule",
+        "body": "Nothing on the site may need a second plate. New colours are forbidden; a new value is only admissible as a screen of ink on card or card on ink, and must hold at least 4.5:1 for text.",
+        "section": "colors"
+      },
+      {
+        "name": "The Drenched Cover Rule",
+        "body": "Covers, inserts and the back cover are full ink surfaces with card-coloured type; interior pages are card with ink type. Selection colour inverts with the surface.",
+        "section": "colors"
+      },
+      {
+        "name": "The Display Ceiling Rule",
+        "body": "Interior headings stay at or under 6rem. Only the two cover elements may exceed it: the home cover title (9.5rem) and the edition numeral (17rem). This override belongs to the programme-cover world and does not extend to any other element.",
+        "section": "typography"
+      },
+      {
+        "name": "The Typewriter Rule",
+        "body": "Courier Prime is for annotation only (notes, captions, credits, page furniture). It never sets a heading, a button or body text.",
+        "section": "typography"
+      },
+      {
+        "name": "The Page Furniture Rule",
+        "body": "Each card page and the ink insert carries a typed running head (\"Programma di sala\" left, edition and Premio name right) and a centred folio (\"— n —\"). The running head content is fixed; it never becomes a per-section label.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat Print Rule",
+        "body": "Surfaces, buttons, photos and boxes cast no shadow. The ticket's drop shadow is the only one, and it is soft and diffuse.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep every colour to ink, card, or one of the four screens (ink-2, paper-2, rule, rule-ink).",
+      "Do convert every photograph to a one-ink duotone (ink #020e7e on card #f2f3f1) before it ships, and note its provenance in public/foto/README.txt.",
+      "Do set titles in Archivo at 62–80% width and 750–850 weight, and text at 100% width.",
+      "Do use Courier Prime for notes, captions, credits, running head, folio and colophon.",
+      "Do separate content with rules and dotted leaders: 1.5px opening rules, 1px hairlines between rows.",
+      "Do open each printed page with the running head and close it with the folio.",
+      "Do keep interior headings at or under 6rem; reserve larger sizes for the home cover title and the edition numeral.",
+      "Do keep touch targets at least 2.75rem tall."
+    ],
+    "donts": [
+      "Don't introduce a second hue, a gradient, or a cream or warm paper.",
+      "Don't round corners or put content in shadowed cards; the ticket's paper shadow is the only shadow.",
+      "Don't show a full-colour photograph; the logo roundel is the one full-colour image, because it is the identity mark.",
+      "Don't use Courier Prime for headings, buttons or body text.",
+      "Don't turn the running head into a per-section label or put small typed labels above headings."
+    ]
+  }
+}
