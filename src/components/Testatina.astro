@@ -1,0 +1,27 @@
+---
+// Running head: page furniture of the printed programme, not a label.
+import { romano } from '../lib/edizioni';
+interface Props {
+  numero: number;
+}
+const { numero } = Astro.props;
+---
+<div class="testatina typed" aria-hidden="true">
+  <span>Programma di sala</span>
+  <span>{romano(numero)} Premio Giovanni Capanna</span>
+</div>
+
+<style>
+  .testatina {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    margin-bottom: var(--space-5);
+    padding-block: var(--space-2) 0.6rem;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink-2);
+    font-size: 0.8125rem;
+  }
+  :global(.ink) .testatina { color: var(--paper-2); border-color: var(--rule-ink); }
+</style>

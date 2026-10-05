@@ -1,0 +1,38 @@
+---
+import { FOTO, type NomeFoto } from '../lib/foto';
+interface Props {
+  nome: NomeFoto;
+  didascalia?: string;
+  sizes?: string;
+  eager?: boolean;
+  class?: string;
+}
+const { nome, didascalia, sizes = '(min-width: 64rem) 40vw, 100vw', eager = false, class: classe } = Astro.props;
+const f = FOTO[nome];
+const grande = f.versioni[f.versioni.length - 1];
+---
+<figure class:list={['foto', classe, { ritaglio: f.ritaglio }]}>
+  <img
+    src={`/foto/${nome}-${grande[0]}.webp`}
+    srcset={f.versioni.map(([w]) => `/foto/${nome}-${w}.webp ${w}w`).join(', ')}
+    sizes={sizes}
+    width={grande[0]}
+    height={grande[1]}
+    alt={f.alt}
+    loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : undefined}
+    decoding="async"
+  />
+  {didascalia && <figcaption class="typed">{didascalia}</figcaption>}
+</figure>
+
+<style>
+  .foto { margin: 0; }
+  .foto img { width: 100%; background: var(--rule); }
+  .foto.ritaglio img { background: none; }
+  figcaption {
+    margin-top: 0.6rem;
+    font-size: 0.875rem;
+    color: var(--ink-2);
+  }
+</style>

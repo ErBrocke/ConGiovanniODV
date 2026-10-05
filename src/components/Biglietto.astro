@@ -1,0 +1,94 @@
+---
+import { romano, isoGiorno, type Edizione } from '../lib/edizioni';
+interface Props {
+  edizione: Edizione;
+}
+const { edizione } = Astro.props;
+const anno = edizione.data.data.getUTCFullYear();
+const giorno = edizione.data.data;
+const breve = new Intl.DateTimeFormat('it-IT', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'UTC' })
+  .format(giorno)
+  .replace(/\//g, '.');
+// After midnight following the evening the ticket points to the edition page.
+const fine = `${isoGiorno(giorno)}T23:59:00+01:00`;
+---
+<a
+  class="biglietto"
+  href={`/premio/${anno}.ics`}
+  download={`premio-giovanni-capanna-${anno}.ics`}
+  data-biglietto
+  data-fine={fine}
+  data-dopo={`/premio/${anno}/`}
+>
+  <span class="corpo">
+    <span class="azione" data-azione>Segna la data</span>
+    <span class="quando"><span class="num">{breve}</span><span class="typed" data-nota>ingresso libero</span></span>
+  </span>
+  <span class="tagliando" aria-hidden="true">
+    <span>{romano(edizione.data.numero)}</span>
+  </span>
+</a>
+
+<style>
+  .biglietto {
+    --notch: 0.7rem;
+    --stub: 4.75rem;
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: 1fr var(--stub);
+    min-width: min(100%, 21rem);
+    color: var(--ink);
+    text-decoration: none;
+    filter: drop-shadow(0 0.6rem 1.2rem rgb(0 0 20 / 0.35));
+  }
+  .corpo,
+  .tagliando {
+    background: var(--paper);
+    /* Half-moon notches where the perforation meets the edges. */
+    -webkit-mask: radial-gradient(circle var(--notch) at var(--x) 0, #0000 98%, #000) top / 100% 51% no-repeat,
+      radial-gradient(circle var(--notch) at var(--x) 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+    mask: radial-gradient(circle var(--notch) at var(--x) 0, #0000 98%, #000) top / 100% 51% no-repeat,
+      radial-gradient(circle var(--notch) at var(--x) 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+  }
+  .corpo {
+    --x: 100%;
+    display: grid;
+    gap: 0.35rem;
+    padding: 1rem 1.25rem 1rem 1.25rem;
+  }
+  .quando { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.75rem; }
+  .quando .typed { font-size: 0.875rem; color: var(--ink-2); white-space: nowrap; }
+  .quando .num { white-space: nowrap; }
+  .azione {
+    font-weight: 800;
+    font-stretch: 75%;
+    font-size: 1.75rem;
+    line-height: 1;
+  }
+  .quando { font-weight: 500; font-size: 0.9375rem; }
+  .tagliando {
+    --x: 0;
+    position: relative;
+    display: grid;
+    place-items: center;
+    border-left: 2px dotted var(--ink);
+    transform-origin: 0 100%;
+    transition: transform 0.6s var(--ease-out), border-color 0.4s var(--ease-out);
+  }
+  .tagliando span {
+    font-weight: 850;
+    font-stretch: 62%;
+    font-size: 2.5rem;
+    line-height: 1;
+    letter-spacing: 0.01em;
+  }
+  .biglietto:not(.strappato):hover .tagliando { transform: translate(0.2rem, -0.1rem) rotate(2deg); }
+  .biglietto:focus-visible { outline: 2px solid var(--paper); outline-offset: 5px; }
+
+  /* The tear: the stub comes away along the perforation and stays torn. */
+  .biglietto.strappato .tagliando {
+    transform: translate(0.9rem, 0.45rem) rotate(9deg);
+    border-left-color: transparent;
+    transition-duration: 0.7s, 0.3s;
+  }
+</style>
